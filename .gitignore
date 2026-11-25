@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Work files the scripts create when you run them
+*.part
+publish_log.csv
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

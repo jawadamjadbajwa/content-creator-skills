@@ -707,7 +707,7 @@ No account yet? [Sign up for Syno Clips](https://clips.synofex.com/r/5cb59f4d).
 #### How It Works
 
 1. Setup check: connected accounts, credits, plan features.
-2. Video in: upload the local file (after your OK) or give a YouTube, Twitch or Kick link.
+2. Video in: upload the local file (after your OK), either to be cut into clips or, for a finished Short, to post as it is; or give a YouTube, Twitch or Kick link.
 3. Clips are made with settings that fit the video: `blur` layout for stock footage, `face` for a talking head, 1080p, audio clean-up.
 4. Review clips: honest hooks and titles, brand-voice check, facts from the source video; fix titles, hooks and hashtags.
 5. Build the plan from `calendar.csv` (social-media-calendar) or fixed times; fix every FAIL.
@@ -715,7 +715,12 @@ No account yet? [Sign up for Syno Clips](https://clips.synofex.com/r/5cb59f4d).
 7. Each approved item is scheduled (or posted now if you asked) and logged.
 8. Follow up: scheduled list, failed posts with reasons, views for the analytics skill.
 
-**Two ways in:** a **video file from this computer** (mp4, mov, mkv, webm) through `get_video_upload_link`, or a **YouTube, Twitch or Kick link** through `create_clips_from_link`. For a file, Claude asks first (file name, size, settings), then runs the upload script the tool returns, or gives you a private upload page (valid one hour) to drop the file on. For a video made with long-video-generation, finish the human review (`review.human_checked: true`) first.
+**Ways in:** a **video file from this computer** (mp4, mov, mkv, webm) through `get_video_upload_link`, or a **YouTube, Twitch or Kick link** through `create_clips_from_link`. A file can go in two ways:
+
+- `purpose: "clips"` (default): Synoclips cuts it into clips, for a long video.
+- `purpose: "post"`: the finished video goes unchanged to the Schedule page, for a Short or Reel that is already edited. Nothing is cut and no captions are added.
+
+For a file, Claude asks first (file name, size, purpose, settings), then runs the upload script the tool returns, or gives you a private upload page (valid one hour) to drop the file on. For a video made with long-video-generation, finish the human review (`review.human_checked: true`) first.
 
 **Plan checks:** past times, more than 120 days ahead, blackout dates, the same clip twice, missing accounts, title over 100 / hook over 60 / description over 2,000 characters, more than 30 hashtags, banned brand words, empty titles, posts on one account less than 4 hours apart, and scores under your minimum.
 
@@ -756,6 +761,7 @@ Nothing is posted, scheduled, rescheduled, cancelled or retried without your exp
 | A platform is missing | auto-publish | Connect the account on clips.synofex.com → Settings → Integrations. |
 | Claude cannot upload a local video file | auto-publish | Reconnect the Synoclips connector in the Claude app so it loads its latest tools (or start a new chat). Meanwhile, use a YouTube link. |
 | Upload link expired | auto-publish | Links last one hour; ask Claude for a new one (it checks your video list first so nothing is uploaded twice). |
+| "Nothing clip-worthy was found" for a finished Short | auto-publish | It was uploaded to be cut into clips. Ask Claude to upload it again with `purpose: "post"` so it goes to the Schedule page as it is. |
 | A post failed | auto-publish | Ask "why did my post fail?"; Claude reads the reason and asks before retrying. |
 
 ---

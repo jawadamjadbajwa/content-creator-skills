@@ -1,6 +1,6 @@
 # Synoclips connector: tools and limits
 
-Facts below come from the connector's own tool descriptions (read 2026-11-24; `get_video_upload_link` added 2026-11-25). Check again if a call behaves differently: tools change.
+Facts below come from the connector's own tool descriptions (read 2026-11-24; `get_video_upload_link` added 2026-11-25; its `purpose` option added and tested 2026-11-26). Check again if a call behaves differently: tools change.
 
 ## Setup and account
 
@@ -15,11 +15,13 @@ Accounts are connected only on the website (Settings → Integrations). The conn
 
 | Tool | Key inputs | Notes |
 |---|---|---|
-| `get_video_upload_link` | the same clip settings as `create_clips_from_link`, without `url` | For a **local file** (mp4, mov, mkv, webm). Returns a private link (valid one hour) where the person drops the file, and for Claude Code a script that uploads a file from this computer. Clips start by themselves after the upload. Follow with `list_videos` (newest first) and `get_video_status`. Ask before uploading. Added after 2026-11-24; a session connected earlier needs a reconnect to see it. |
+| `get_video_upload_link` | `purpose` `"clips"` (default) or `"post"`; for `"clips"`, the same clip settings as `create_clips_from_link`, without `url` | For a **local file** (mp4, mov, mkv, webm). Returns a private link (valid one hour) where the person drops the file, and for Claude Code a script that uploads a file from this computer. **`"clips"`:** clips start by themselves after the upload (uses credits); the entry has `kind: "video"`. **`"post"`:** the file goes unchanged to the Schedule page, like an upload on the website's Schedule page. The entry has `kind: "post"` and stage "Ready to schedule", with one clip `v1` (kind `upload`, the whole file); its title is the file name and its hook, description and hashtags are empty. The script prints "uploaded, ready to post". Follow with `list_videos` (newest first) and `get_video_status`. Ask before uploading. A session connected before an option was added needs a reconnect to see it. |
 | `create_clips_from_link` | `url` (YouTube, Twitch or Kick), `mode` ai/custom, `count` 1–20, `min_length` 5–120 s, `max_length` 10–180 s, `start_at`/`end_at`, `layout` face/blur/zoom/crop/split, `quality` 360/480/720/1080, `caption_style`, `music` off/auto/mood, `enhance_audio`, `auto_zoom`, `sound_effects`, `transitions`, `beep_bad_words`, `color` natural/vivid, `highlight_reel_seconds` 0/30/45/60 | Uses credits. Returns `video_id` at once; clips are made in the background (a few minutes). For local files use `get_video_upload_link`. |
 | `get_video_status` | `video_id` | Waiting, running, done or failed, with finished clips (best first). |
 | `list_videos` | `limit`, `status` | The user's videos, newest first. |
 | `get_clip_options` | — | Framings, caption looks, music moods, dubbing languages. |
+
+Which upload purpose: a finished, already edited Short, Reel or TikTok → `"post"`. A long video to cut into shorts → `"clips"`. Clip mode on a ~30 s finished Short returned "Done, but nothing clip-worthy was found" with no clips (tested 2026-11-26).
 
 Layout guide: `blur` for stock footage or slides (full frame on a blurred fill), `face` for a talking head, `crop` to fill the screen, `split` for gaming facecam.
 
